@@ -1,0 +1,5 @@
+security.oauth:
+    authorize_endpoint: "https://api-sandbox.rabobank.nl/openapi/sandbox/oauth2/authorize"
+    token_endpoint: "https://api-sandbox.rabobank.nl/openapi/sandbox/oauth2/token"
+    client_id: "494520a3-c627-4b76-a3f5-76bcd9f7b7e1"
+    client_secret: "X2lR7lY2uD2eJ3iJ7iG5kC1yP3aI7lW0vJ0yS7wF8gK4sJ0lM3"
