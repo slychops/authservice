@@ -1,5 +1,6 @@
 package com.sandbox.playground.blank_spring_projects;
 
+import com.sandbox.playground.blank_spring_projects.model.Token;
 import com.sandbox.playground.blank_spring_projects.services.OAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class RaboController {
     }
 
     @GetMapping(value ="auth", params = "code")
-    public String getToken(@RequestParam String code) {
+    public Token getToken(@RequestParam String code) {
         LOGGER.info("In getToken -->\t {}", code);
         authService.setCode(code);
         return authService.getToken();
@@ -37,7 +38,7 @@ public class RaboController {
                 .addAttribute("response_type", "code")
                 .addAttribute("scope", "oauth2.consents.read");
 
-        return new RedirectView(authService.oAuthEndpoint);
+        return new RedirectView(authService.getoAuthEndpoint());
     }
 
 }
