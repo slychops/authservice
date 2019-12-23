@@ -3,6 +3,7 @@ package com.sandbox.playground.blank_spring_projects.services;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 
 public class ConnectionService {
@@ -13,11 +14,9 @@ public class ConnectionService {
             String clientSecret) {
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-//        headers.add(Headers.ACCEPT, ContentType.APPLICATION_JSON);
-        headers.add(Headers.ACCEPT, "*/*");
+        headers.add(Headers.ACCEPT, ContentType.APPLICATION_JSON);
         headers.add(Headers.CONTENT_TYPE, contentTypeFormUrlencoded);
-        headers.add("Content", "application/json");
-        headers.add(Headers.ACCEPT_ENCODING, ContentType.GZIP_DEFLATE);
+        headers.add(Headers.ACCEPT_ENCODING, StandardCharsets.UTF_8.name());
         headers.add(Headers.AUTHORIZATION, EncodingService.prepareBase64Encoding(clientId, clientSecret));
         return headers;
     }
