@@ -25,10 +25,12 @@ public class OAuthService extends ConnectionService {
     private final String clientSecret;
     private String authorizationCode;
 
-    public OAuthService(
+    static Token token;
+
+    OAuthService(
             @Value("${security.oauth.authorize_endpoint}") String oAuthEndpoint,
             @Value("${security.oauth.token_endpoint}") String tokenEndpoint,
-            @Value("${security.oauth.client_id}") String clientId,
+            @Value("${security.general.client_id}") String clientId,
             @Value("${security.oauth.client_secret}") String clientSecret) {
         this.oAuthEndpoint = oAuthEndpoint;
         this.tokenEndpoint = tokenEndpoint;
@@ -36,7 +38,7 @@ public class OAuthService extends ConnectionService {
         this.clientSecret = clientSecret;
     }
 
-    public Token getToken() {
+    public final Token retrieveToken() {
         String token = null;
         MultiValueMap<String, String> headers = prepareHeaders(CONTENT_TYPE_FORM_URLENCODED,
                 clientId, clientSecret);
@@ -49,19 +51,25 @@ public class OAuthService extends ConnectionService {
         HttpEntity<String> httpRequest = new HttpEntity<>(body, headers);
         ResponseEntity<Token> httpResponse = client.exchange(tokenEndpoint, HttpMethod.POST, httpRequest, Token.class);
         if (Objects.requireNonNull(httpResponse.getBody()).getToken_type().equals("Bearer")) {
-            LOGGER.info("Received token");
-            return httpResponse.getBody();
+            return updateToken(httpResponse.getBody());
         } else {
             LOGGER.error("NO TOKEN RECEIVED : {}", httpResponse.getStatusCode());
         }
         return new ErrorToken();
     }
 
-    public void setCode(String code) {
+    private Token updateToken(Token token) {
+        LOGGER.info("Received token");
+        TLSService.authorization = token.getAccess_token();
+        return token;
+    }
+
+    public final void setCode(String code) {
         this.authorizationCode = code;
     }
 
     public String getoAuthEndpoint() {
         return this.oAuthEndpoint;
     }
+
 }

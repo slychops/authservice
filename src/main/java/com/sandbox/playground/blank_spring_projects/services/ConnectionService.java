@@ -1,12 +1,16 @@
 package com.sandbox.playground.blank_spring_projects.services;
 
+import com.sandbox.playground.blank_spring_projects.utils.ContentType;
+import com.sandbox.playground.blank_spring_projects.utils.Headers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 
-public class ConnectionService {
+class ConnectionService {
+
+    protected ConnectionService(){}
 
     protected MultiValueMap<String, String> prepareHeaders(
             String contentTypeFormUrlencoded,
