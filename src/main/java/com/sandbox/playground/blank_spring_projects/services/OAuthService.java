@@ -19,7 +19,7 @@ public class OAuthService extends ConnectionService {
     private static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
     private static final String BODY_TYPE_URLENCODED = "x-www-form-urlencoded";
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuthService.class);
-    public final String oAuthEndpoint;
+    public  String oAuthEndpoint;
     private final String tokenEndpoint;
     private final String clientId;
     private final String clientSecret;

@@ -3,7 +3,6 @@ package com.sandbox.playground.blank_spring_projects.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -23,6 +22,7 @@ class TLSService extends ConnectionService {
     private final String digest;
     private String date;
     private String signature;
+    private String signingString;
 
     @Autowired
     TLSService(@Value("${security.general.client_id}") String clientId,
@@ -38,7 +38,8 @@ class TLSService extends ConnectionService {
 
     public final HttpEntity<String> prepareAccountsRequest() {
         this.date = ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
-        this.signature = generateSignature();
+        this.signingString = setSigningString();
+        this.signature = EncodingService.generateSignature(this.signingString);
         System.out.println("This is where we will now create the headers.");
 
 /**----------------HEADERS----------------**/ // ---**--- added if required for signature value
@@ -53,7 +54,11 @@ class TLSService extends ConnectionService {
         return null;
     }
 
-    private String generateSignature() {
-        return null;
+    private String setSigningString() {
+        StringBuilder signingStringBuilder = new StringBuilder();
+        signingStringBuilder.append("date: ").append(this.date).append("\n");
+        signingStringBuilder.append("digest: ").append(this.digest).append("\n");
+        signingStringBuilder.append("x-request-id: ").append(this.xRequestId.toString());
+        return signingStringBuilder.toString();
     }
 }

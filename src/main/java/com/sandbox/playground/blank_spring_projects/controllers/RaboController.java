@@ -6,7 +6,6 @@ import com.sandbox.playground.blank_spring_projects.services.AccountService;
 import com.sandbox.playground.blank_spring_projects.services.OAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,6 @@ public class RaboController {
     private final OAuthService authService;
     private final AccountService accountService;
 
-    @Autowired
     public RaboController(OAuthService authService,
                           AccountService accountService,
                           @Value("${security.oauth.scope.read}") String scope) {
@@ -33,14 +31,14 @@ public class RaboController {
         this.scope = scope;
     }
 
-    @GetMapping(value ="auth", params = "code")
+    @GetMapping(value = "auth", params = "code")
     public Token getToken(@RequestParam String code) {
         LOGGER.info("In getToken -->\t {}", code);
         authService.setCode(code);
         return authService.retrieveToken();
     }
 
-    @GetMapping(value="home")
+    @GetMapping(value = "home")
     public RedirectView redirectForToken(RedirectAttributes attributes) {
         attributes.addFlashAttribute("flashattributes", "redirect")
                 .addAttribute("client_id", "494520a3-c627-4b76-a3f5-76bcd9f7b7e1")
@@ -51,7 +49,7 @@ public class RaboController {
         return new RedirectView(authService.getoAuthEndpoint());
     }
 
-    @GetMapping(value="accounts")
+    @GetMapping(value = "accounts")
     public Accounts getAccounts() {
 
         return accountService.getAccountList();
