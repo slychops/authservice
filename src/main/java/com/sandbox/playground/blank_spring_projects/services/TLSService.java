@@ -1,13 +1,23 @@
 package com.sandbox.playground.blank_spring_projects.services;
 
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 class TLSService extends ConnectionService {
@@ -20,27 +30,42 @@ class TLSService extends ConnectionService {
     private final String tppSignatureCertificate;
     private final UUID xRequestId;
     private final String digest;
+    private final EncodingService encodingService;
     private String date;
     private String signature;
     private String signingString;
+    private final RestTemplate client;
 
-    @Autowired
     TLSService(@Value("${security.general.client_id}") String clientId,
                @Value("${security.psd2.certificate}") String certificate,
                @Value("${accounts.endpoint.accountslist}") String url,
-               @Value("") String body) {
+               @Value("") String body,
+               RestTemplate restTemplate,
+               EncodingService encodingService) {
+        this.encodingService = encodingService;
         this.xIbmClientId = clientId;
         this.tppSignatureCertificate = certificate;
         this.endpoint = url;
+        this.client = restTemplate;
         this.xRequestId = UUID.randomUUID();
         this.digest = EncodingService.createDigest(SHA_512, body);
     }
 
     public final HttpEntity<String> prepareAccountsRequest() {
         this.date = ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+        this.date = getCurrentDateTime();
         this.signingString = setSigningString();
-        this.signature = EncodingService.generateSignature(this.signingString);
-        System.out.println("This is where we will now create the headers.");
+        this.signature = createSignature(encodingService.generateSignature(this.signingString));
+//        System.out.println("This is where we will now create the headers.");
+        HttpEntity<String> request = new HttpEntity<>(ConnectionService.prepareHeaders(
+                authorization,
+                date,
+                digest,
+                signature,
+                tppSignatureCertificate,
+                xIbmClientId,
+                xRequestId));
+        ResponseEntity<String> result = client.exchange(endpoint, HttpMethod.GET, request, String.class);
 
 /**----------------HEADERS----------------**/ // ---**--- added if required for signature value
 // ...  /*  .addHeader("x-ibm-client-id", "Client ID")                      <-- ACTUAL CLIENT_ID            */
@@ -52,6 +77,25 @@ class TLSService extends ConnectionService {
 /**... ---**--- **//*  .addHeader("date", "REPLACE_THIS_VALUE")                       <-- CHECK FORMAT                 */
 
         return null;
+    }
+
+    private String createSignature(String signature) {
+        StringBuilder sigString = new StringBuilder();
+        sigString.append("keyId=\"").append("1523433508").append("\",")
+                .append("algorithm=\"").append("rsa-sha512").append("\",")
+                .append("headers=\"").append("date ").append("digest ").append("x-request-id").append("\",")
+                .append("signature=").append("\"").append(signature).append("\"");
+        return sigString.toString();
+    }
+
+    private String getCurrentDateTime() {
+        DateFormat dateFormat;
+        Calendar calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat(
+                "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        System.out.println(dateFormat.format(calendar.getTime()));
+        return dateFormat.format(calendar.getTime());
     }
 
     private String setSigningString() {

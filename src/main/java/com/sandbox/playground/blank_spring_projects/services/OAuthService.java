@@ -19,13 +19,13 @@ public class OAuthService extends ConnectionService {
     private static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
     private static final String BODY_TYPE_URLENCODED = "x-www-form-urlencoded";
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuthService.class);
-    public  String oAuthEndpoint;
+    public String oAuthEndpoint;
     private final String tokenEndpoint;
     private final String clientId;
     private final String clientSecret;
     private String authorizationCode;
 
-    static Token token;
+    private Token token;
 
     OAuthService(
             @Value("${security.oauth.authorize_endpoint}") String oAuthEndpoint,
@@ -60,7 +60,7 @@ public class OAuthService extends ConnectionService {
 
     private Token updateToken(Token token) {
         LOGGER.info("Received token");
-        TLSService.authorization = token.getAccess_token();
+        TLSService.authorization = "Bearer " + token.getAccess_token();
         return token;
     }
 

@@ -7,10 +7,30 @@ import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 class ConnectionService {
 
     protected ConnectionService(){}
+
+    protected static MultiValueMap<String, String> prepareHeaders(String authorization,
+                                          String date,
+                                          String digest,
+                                          String signature,
+                                          String tppSignatureCertificate,
+                                          String xIbmClientId,
+                                          UUID xRequestId) {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add(Headers.ACCEPT, ContentType.APPLICATION_JSON);
+        headers.add(Headers.AUTHORIZATION, authorization);
+        headers.add(Headers.DATE, date);
+        headers.add(Headers.DIGEST, digest);
+        headers.add(Headers.SIGNATURE, signature);
+        headers.add(Headers.TPP, tppSignatureCertificate);
+        headers.add(Headers.X_CLIENT, xIbmClientId);
+        headers.add(Headers.X_REQUEST, xRequestId.toString());
+        return headers;
+    }
 
     protected MultiValueMap<String, String> prepareHeaders(
             String contentTypeFormUrlencoded,
