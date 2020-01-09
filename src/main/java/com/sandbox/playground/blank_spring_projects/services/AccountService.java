@@ -22,12 +22,14 @@ public class AccountService {
                           @Value("${accounts.endpoint.accountslist}") String url) {
         this.endpoint = url;
         this.client = client;
+        //ToDo: This is not a service.. rethink
         this.tlsService = tlsService;
     }
 
-    public Accounts getAccountList() {
+    public String getAccountList() {
         HttpEntity<String> httpRequest = tlsService.prepareAccountsRequest();
-        return fetchAccounts(httpRequest).getBody();
+        return httpRequest.getBody();
+//        return fetchAccounts(httpRequest).getBody();
     }
 
     //Redundant method. How do I name methods here to improve clarity?

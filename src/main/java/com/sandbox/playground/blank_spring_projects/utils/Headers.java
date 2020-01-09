@@ -1,5 +1,6 @@
 package com.sandbox.playground.blank_spring_projects.utils;
 
+//ToDo: Make this an eNum
 public final class Headers {
     public static final String AUTHORIZATION = "authorization";
     public static final String GRANT_TYPE = "grant_type";

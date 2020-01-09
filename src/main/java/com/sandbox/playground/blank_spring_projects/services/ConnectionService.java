@@ -1,9 +1,14 @@
 package com.sandbox.playground.blank_spring_projects.services;
 
+import com.sandbox.playground.blank_spring_projects.exceptions.UnsupportedContentTypeException;
 import com.sandbox.playground.blank_spring_projects.utils.ContentType;
 import com.sandbox.playground.blank_spring_projects.utils.Headers;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
@@ -35,8 +40,11 @@ class ConnectionService {
     protected MultiValueMap<String, String> prepareHeaders(
             String contentTypeFormUrlencoded,
             String clientId,
-            String clientSecret) {
-
+            String clientSecret) throws UnsupportedContentTypeException {
+        if (!"application/x-www-form-urlencoded".equals(contentTypeFormUrlencoded)) {
+            throw new UnsupportedContentTypeException("Unsupported content-type provided. Currently only supporting" +
+                    "x-www-form-urlencoded");
+        }
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(Headers.ACCEPT, ContentType.APPLICATION_JSON);
         headers.add(Headers.CONTENT_TYPE, contentTypeFormUrlencoded);
@@ -55,5 +63,11 @@ class ConnectionService {
         sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
     }
+
+    //ToDo: Make it work
+//    protected T ResponseEntity<T> getRequest(HttpEntity request, Class T) {
+//
+//        return new RestTemplate().exchange("www.google.com", HttpMethod.GET, request, T.class);
+//    }
 
 }

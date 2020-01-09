@@ -1,5 +1,6 @@
 package com.sandbox.playground.blank_spring_projects.services;
 
+import com.sandbox.playground.blank_spring_projects.exceptions.InvalidValuesPassedForBase64EncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,32 +22,31 @@ class EncodingService {
         this.privateKey = convertToPrivateKey();
     }
 
-    static String prepareBase64Encoding(String clientId, String clientSecret) {
+    static String prepareBase64Encoding(String clientId, String clientSecret)  {
+        if(clientId == null || clientSecret == null){
+            throw new InvalidValuesPassedForBase64EncodingException("null values passed");
+
+        }
         String baseValue = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes());
         return "Basic " + baseValue;
     }
 
-    static String createDigest(String algorithm, String body) {
-        if ("SHA-512".equals(algorithm)) {
+    static String createDigest(String algorithm, String body) throws NoSuchAlgorithmException {
+        if ("SHA-512".equalsIgnoreCase(algorithm)) {
             return algorithm.toLowerCase() + "=" + createSHA512(body);
         } else {
-            LOGGER.warn("Unknown hashing algorithm requested");
+            throw new NoSuchAlgorithmException("Unknown hashing algorithm requested: " + algorithm);
         }
-        return null;
     }
 
-    private static String createSHA512(String body) {
-        try {
+    private static String createSHA512(String body) throws NoSuchAlgorithmException{
             MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(body.getBytes());
             byte[] messageDigest = md.digest();
             return Base64.getEncoder().encodeToString(messageDigest);
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.info(e.getLocalizedMessage());
-        }
-        return null;
     }
 
-    public String generateSignature(String signingString) {
+    String generateSignature(String signingString) {
         Signature sig;
         byte[] signingStringByte = signingString.getBytes();
         String signedString = null;
@@ -69,8 +69,7 @@ class EncodingService {
 
         try {
             fact = KeyFactory.getInstance("RSA");
-            PrivateKey prvKey = fact.generatePrivate(keySpecPKCS8);
-            return prvKey;
+            return fact.generatePrivate(keySpecPKCS8);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             LOGGER.info("No such instance was able to be created, {}", e.getLocalizedMessage());
