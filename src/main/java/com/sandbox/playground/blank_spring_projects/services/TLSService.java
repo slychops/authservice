@@ -75,6 +75,7 @@ class TLSService extends ConnectionService {
 
         //ToDo: move the actual request to a different method (that doesn't prepare headers) and make request from ConnectionService perhaps"
         //ToDo: get accounts from the this request
+        //Note that ResponseEntity extends HttpEntity
         return client.exchange(endpoint, HttpMethod.GET, request, String.class);
     }
 

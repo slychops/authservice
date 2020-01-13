@@ -2,7 +2,9 @@ security.oauth:
     authorize_endpoint: "https://api-sandbox.rabobank.nl/openapi/sandbox/oauth2/authorize"
     token_endpoint: "https://api-sandbox.rabobank.nl/openapi/sandbox/oauth2/token"
     client_secret: "F1sQ1nL4jF1jJ1dK4eJ6qI6nI8gW3sA0aB0fT8xD3iR2eX2wY4"
-    scope.read: "ais.balances.read"
+    token.scopes:
+        view_balance: "ais.balances.read"
+        view_transactions: "ais.transactions.read-90days"
 #    scope.read: "oauth2.consents.read"
 #    scope.oauth_consent: "oauth2.consents.read"
 security.psd2:

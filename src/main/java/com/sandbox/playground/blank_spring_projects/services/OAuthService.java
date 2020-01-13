@@ -3,6 +3,7 @@ package com.sandbox.playground.blank_spring_projects.services;
 import com.sandbox.playground.blank_spring_projects.exceptions.UnsupportedContentTypeException;
 import com.sandbox.playground.blank_spring_projects.model.ErrorToken;
 import com.sandbox.playground.blank_spring_projects.model.Token;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -15,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
+import java.lang.String;
 
 @Service
 @Slf4j
@@ -28,7 +30,7 @@ public class OAuthService extends ConnectionService {
     private final RestTemplate authClient;
     private String authorizationCode;
 
-    OAuthService(
+    public OAuthService(
             @Value("${security.oauth.authorize_endpoint}") String oAuthEndpoint,
             @Value("${security.oauth.token_endpoint}") String tokenEndpoint,
             @Value("${security.general.client_id}") String clientId,

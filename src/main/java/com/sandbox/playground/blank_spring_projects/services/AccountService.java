@@ -26,6 +26,7 @@ public class AccountService {
         this.tlsService = tlsService;
     }
 
+    //ToDo: return a list of accounts
     public String getAccountList() {
         HttpEntity<String> httpRequest = tlsService.prepareAccountsRequest();
         return httpRequest.getBody();

@@ -25,7 +25,7 @@ public class RaboController {
     public RaboController(OAuthService authService,
                           AccountService accountService,
                           //ToDo: how should we be treating the scope??
-                          @Value("${security.oauth.scope.read}") String scope) {
+                          @Value("${security.oauth.token.scopes.view_balance}") String scope) {
         this.authService = authService;
         this.accountService = accountService;
         this.scope = scope;
