@@ -1,11 +1,13 @@
 package com.sandbox.playground.blank_spring_projects.newstructure.service;
 
+import org.springframework.stereotype.Service;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.stream.Collectors;
 
-//@Service
+@Service
 final class EncodingService implements IEncodingSrv {
 
     @Override

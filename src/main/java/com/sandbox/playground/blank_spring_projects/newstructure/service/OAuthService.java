@@ -16,13 +16,12 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-//@Service
+@Service
 @Slf4j
 public class OAuthService implements IAuthS {
 
-    //private final ConnectionService connectionService;
-//    private final EncodingService encodingService;
-    private final OAuthTokenRequestBuilder<String> requestBuilder;
+    private final ConnectionService connectionService;
+    private final OAuthTokenRequestMaker<String> requestBuilder;
     private final String authCodeUri;
     private final String clientId;
     private final URI tokenUri;
@@ -30,12 +29,14 @@ public class OAuthService implements IAuthS {
 
     @Autowired
     public OAuthService(
-            OAuthTokenRequestBuilder<String> requestBuilder,
+            OAuthTokenRequestMaker<String> requestBuilder,
+            ConnectionService connectionService,
             @NonNull @Value("${security.oauth.authorize_endpoint}") String authEndPoint,
             @NonNull @Value("${security.general.client_id}") String clientId,
             @NonNull @Value("${security.oauth.token_endpoint}") URI tokenUri,
             @NonNull @Value("${security.oauth.client_secret}") String clientSecret) {
         this.requestBuilder = requestBuilder;
+        this.connectionService = connectionService;
         this.authCodeUri = authEndPoint;
         this.clientId = clientId;
         this.tokenUri = tokenUri;
@@ -46,10 +47,6 @@ public class OAuthService implements IAuthS {
     public Token fetchToken(@NonNull String authorizationCode) throws InsufficientResourceException {
         return null;
         //return ConnectionService.makeRequest(endpoint, rb.getRequest(clientId, clientSecret, authCode), Token.class)
-    }
-
-    HttpEntity<String> prepareRequest() {
-        return null;
     }
 
     @Override

@@ -5,40 +5,40 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
 import java.util.Base64;
-import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OAuthTokenRequestBuilderTest {
 
     String clientId = "0123";
     String clientSecret = "superultramegatopsecret";
+    String authorizationCode = "auth_code";
 
-    OAuthTokenRequestBuilder<String> request = OAuthTokenRequestBuilder.prepareRequest(clientId, clientSecret);
-
-    @Test
-    void checkRequestHeaders_AreNotNull(){
-        assertNotNull(request.getHeaders());
-    }
+//    OAuthTokenRequestBuilder<String> request = OAuthTokenRequestBuilder.prepareRequest(clientId, clientSecret);
 
     @Test
-    void checkContent_ofPrepareHeaders_containsClientIdAndSecret(){
+    void checkHeadersOfHttpEntity_whenReturnHttpEntityIsCalled() {
+
+        OAuthTokenRequestMaker<String> requestMaker = new OAuthTokenRequestMaker<>(new EncodingService(), clientId, clientSecret);
+
         String expectedAuthorization = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes());
+        HttpEntity<String> requestEntity = requestMaker.returnHttpEntity(authorizationCode);
+        HttpHeaders headers = requestEntity.getHeaders();
 
-        HttpHeaders headers = request.getHeaders();
-
+        assertNotNull(headers.get("authorization").get(0));
         assertEquals(4, headers.size());
-        assertTrue(headers.containsKey("authorization"));
-        assertEquals(expectedAuthorization,
-                Objects.requireNonNull(headers.get("authorization")).get(0));
+        assertEquals(expectedAuthorization, headers.get("authorization").get(0));
     }
 
     @Test
-    void checkSomething() {
-        String expectedAuthorization = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes());
+    void checkBodyOfHttpEntity_whenReturnHttpEntityIsCalled() {
 
-        HttpEntity<String> request = OAuthTokenRequestBuilder.prepareRequest(clientId, clientSecret);
-        assertEquals(expectedAuthorization, Objects.requireNonNull(request.getHeaders().get("authorization")).get(0));
+        OAuthTokenRequestMaker<String> requestMaker = new OAuthTokenRequestMaker<>(new EncodingService(), clientId, clientSecret);
+
+        String expectedBody = "grant_type=authorization_code&code=" + authorizationCode;
+
+        assertEquals(expectedBody, requestMaker.returnHttpEntity(authorizationCode).getBody());
     }
 
 }

@@ -1,13 +1,14 @@
 package com.sandbox.playground.blank_spring_projects.newstructure.service;
 
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.InsufficientResourceException;
 import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.UnknownContextException;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.RedirectContext;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.TokenScope;
 import org.apache.http.client.utils.URIBuilder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import javax.naming.InsufficientResourcesException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -28,8 +29,8 @@ class OAuthServiceTest {
     // code: authorization code received from Rabo
     // Format of body: grant_type=authorization_code&code={auth code}
     // Request a token from Rabo
-    private OAuthTokenRequestBuilder oAuthTokenRequestBuilder =
-            (OAuthTokenRequestBuilder) OAuthTokenRequestBuilder.prepareRequest("1234", "clientSecret");
+
+    private OAuthTokenRequestMaker requestBuilder = new SetupClasses().getoAuthTokenRequestMaker();
 
     @Test
     void whenUserRequestsAuthCodeEndPoint_sendEndPoint_withOnlyUri() throws URISyntaxException, UnknownContextException {
@@ -49,7 +50,7 @@ class OAuthServiceTest {
 
     private void checkExpectation(String testEndpoint, String clientId, RedirectContext context, TokenScope scope) throws URISyntaxException, UnknownContextException {
         OAuthService authService = new OAuthService(
-                oAuthTokenRequestBuilder,
+                requestBuilder,
                 testEndpoint,
                 clientId,
                 new URI(""),
@@ -61,4 +62,5 @@ class OAuthServiceTest {
                 .build();
         assertEquals(expectedOutput, authService.getAuthCodeUri(context, scope));
     }
+
 }

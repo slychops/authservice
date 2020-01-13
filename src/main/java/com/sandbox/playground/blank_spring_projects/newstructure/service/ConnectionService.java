@@ -4,16 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.constraints.Null;
 import java.net.URI;
 
-//@Service
+@Service
 class ConnectionService implements IConnectionSrv {
 
-    @Autowired
     private RestTemplate client;
+
+    @Autowired
+    public ConnectionService(RestTemplate client) {
+        this.client = client;
+    }
 
     @Override
     public <T> ResponseEntity<T> doGet(URI uri, HttpMethod requestType, HttpEntity<String> request, Class<T> responseType) {
