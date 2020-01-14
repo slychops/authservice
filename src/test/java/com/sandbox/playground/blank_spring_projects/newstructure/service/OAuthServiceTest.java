@@ -1,21 +1,32 @@
 package com.sandbox.playground.blank_spring_projects.newstructure.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.sandbox.playground.blank_spring_projects.model.ErrorToken;
+import com.sandbox.playground.blank_spring_projects.model.Token;
+import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.InsufficientResourceException;
 import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.UnknownContextException;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.RedirectContext;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.TokenScope;
 import org.apache.http.client.utils.URIBuilder;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OAuthServiceTest {
+
+    private OAuthTokenRequestMaker requestBuilder = new SetupClasses().getoAuthTokenRequestMaker();
+    SetupClasses classes = new SetupClasses();
 
     // Request a token from Rabo (POST)
     // Build the request
@@ -30,7 +41,21 @@ class OAuthServiceTest {
     // Format of body: grant_type=authorization_code&code={auth code}
     // Request a token from Rabo
 
-    private OAuthTokenRequestMaker requestBuilder = new SetupClasses().getoAuthTokenRequestMaker();
+
+
+
+    @Test
+    void whenCalling_fetchToken_withNullValue_expectNullPointerThrown() {
+        OAuthService service = new OAuthService(
+                classes.getoAuthTokenRequestMaker(),
+                new ConnectionService(new RestTemplate()),
+                "a",
+                "c",
+                URI.create("SA"),
+                "d");
+        assertThrows(NullPointerException.class,
+                () -> service.fetchToken(null));
+    }
 
     @Test
     void whenUserRequestsAuthCodeEndPoint_sendEndPoint_withOnlyUri() throws URISyntaxException, UnknownContextException {
@@ -51,6 +76,7 @@ class OAuthServiceTest {
     private void checkExpectation(String testEndpoint, String clientId, RedirectContext context, TokenScope scope) throws URISyntaxException, UnknownContextException {
         OAuthService authService = new OAuthService(
                 requestBuilder,
+                new ConnectionService(new RestTemplate()),
                 testEndpoint,
                 clientId,
                 new URI(""),

@@ -15,8 +15,6 @@ class OAuthTokenRequestBuilderTest {
     String clientSecret = "superultramegatopsecret";
     String authorizationCode = "auth_code";
 
-//    OAuthTokenRequestBuilder<String> request = OAuthTokenRequestBuilder.prepareRequest(clientId, clientSecret);
-
     @Test
     void checkHeadersOfHttpEntity_whenReturnHttpEntityIsCalled() {
 

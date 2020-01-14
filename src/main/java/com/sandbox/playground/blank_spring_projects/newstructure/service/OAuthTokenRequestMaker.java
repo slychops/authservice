@@ -29,10 +29,12 @@ final class OAuthTokenRequestMaker<T>  {
     }
 
     public HttpEntity<String> returnHttpEntity(String authorizationCode) {
+
         return new HttpEntity<>(prepareBody(authorizationCode), this.headers);
     }
 
     private String prepareBody(String authorizationCode){
+
         return "grant_type=authorization_code&code=" + authorizationCode;
     }
 
@@ -42,6 +44,7 @@ final class OAuthTokenRequestMaker<T>  {
         headersPrep.add("content-type", "application/x-www-form-urlencoded");
         headersPrep.add("accept-encoding", StandardCharsets.UTF_8.name());
         headersPrep.add("authorization", encodingService.returnAsBase64(":", id, secret));
+
         return headersPrep;
     }
 

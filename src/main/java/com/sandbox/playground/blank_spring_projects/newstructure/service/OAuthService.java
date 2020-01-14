@@ -11,6 +11,8 @@ import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -45,7 +47,12 @@ public class OAuthService implements IAuthS {
 
     @Override
     public Token fetchToken(@NonNull String authorizationCode) throws InsufficientResourceException {
+        ResponseEntity response = connectionService.doPost(URI.create("www"), HttpMethod.POST, new OAuthTokenRequestMaker<>(new EncodingService(), clientId, clientSecret).returnHttpEntity(authorizationCode), Token.class);
+        response.getStatusCode();
+        System.out.println("Hi there");
         return null;
+//        return null;
+
         //return ConnectionService.makeRequest(endpoint, rb.getRequest(clientId, clientSecret, authCode), Token.class)
     }
 
