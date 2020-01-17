@@ -11,7 +11,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 
-@Service
+//@Service
 class EncodingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EncodingService.class);
     private final String privateKeyString;

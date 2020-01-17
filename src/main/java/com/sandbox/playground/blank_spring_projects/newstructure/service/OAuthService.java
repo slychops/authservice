@@ -1,5 +1,6 @@
 package com.sandbox.playground.blank_spring_projects.newstructure.service;
 
+import com.sandbox.playground.blank_spring_projects.model.ErrorToken;
 import com.sandbox.playground.blank_spring_projects.model.Token;
 import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.InsufficientResourceException;
 import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.UnknownContextException;
@@ -11,9 +12,12 @@ import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,15 +27,16 @@ import java.net.URISyntaxException;
 public class OAuthService implements IAuthS {
 
     private final ConnectionService connectionService;
-    private final OAuthTokenRequestMaker<String> requestBuilder;
+    private final OAuthTokenRequestMaker requestBuilder;
     private final String authCodeUri;
     private final String clientId;
     private final URI tokenUri;
     private final String clientSecret;
 
+
     @Autowired
     public OAuthService(
-            OAuthTokenRequestMaker<String> requestBuilder,
+            OAuthTokenRequestMaker requestBuilder,
             ConnectionService connectionService,
             @NonNull @Value("${security.oauth.authorize_endpoint}") String authEndPoint,
             @NonNull @Value("${security.general.client_id}") String clientId,
@@ -46,14 +51,11 @@ public class OAuthService implements IAuthS {
     }
 
     @Override
-    public Token fetchToken(@NonNull String authorizationCode) throws InsufficientResourceException {
-        ResponseEntity response = connectionService.doPost(URI.create("www"), HttpMethod.POST, new OAuthTokenRequestMaker<>(new EncodingService(), clientId, clientSecret).returnHttpEntity(authorizationCode), Token.class);
-        response.getStatusCode();
-        System.out.println("Hi there");
-        return null;
-//        return null;
+    public Token fetchToken(@NonNull String authorizationCode) {
+        HttpEntity<String> response = requestBuilder.returnHttpEntity(authorizationCode);
+        ResponseEntity<Token> responseEntity = connectionService.doPost(tokenUri, HttpMethod.POST, response, Token.class);
 
-        //return ConnectionService.makeRequest(endpoint, rb.getRequest(clientId, clientSecret, authCode), Token.class)
+        return responseEntity.getBody();
     }
 
     @Override

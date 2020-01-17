@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Objects;
 import java.lang.String;
 
-@Service
+//@Service
 @Slf4j
 public class OAuthService extends ConnectionService {
     private static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";

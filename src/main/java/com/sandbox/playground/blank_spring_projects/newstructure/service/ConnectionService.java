@@ -6,8 +6,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import javax.validation.constraints.Null;
 import java.net.URI;
 
 @Service
@@ -27,7 +25,7 @@ class ConnectionService implements IConnectionSrv {
 
     @Override
     public <T> ResponseEntity<T> doPost(URI uri, HttpMethod requestType, HttpEntity<String> request, Class<T> responseType) {
-        if(request == null){
+        if (request == null) {
             throw new NullPointerException();
         }
         return client.exchange(uri.toString(), HttpMethod.POST, request, responseType);

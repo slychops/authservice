@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 //ToDo: Once we have a need for another OAuthTokenRequestMaker we can think of declaring different beans in config with different clientId's and secrets
 
 @Service
-final class OAuthTokenRequestMaker<T>  {
+class OAuthTokenRequestMaker  {
 
     private final EncodingService encodingService;
     private final HttpHeaders headers;
@@ -22,7 +22,7 @@ final class OAuthTokenRequestMaker<T>  {
     OAuthTokenRequestMaker(
             EncodingService encodingService,
             @NonNull @Value("${security.general.client_id}") String clientId,
-            @NonNull @Value("${security.general.client_secret}") String clientSecret) {
+            @NonNull @Value("${security.oauth.client_secret}") String clientSecret) {
 
         this.encodingService = encodingService;
         this.headers = new HttpHeaders(createHeaders(clientId, clientSecret));

@@ -18,7 +18,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-@Service
+//@Service
 @Slf4j
 class TLSService extends ConnectionService {
 

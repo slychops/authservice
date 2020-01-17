@@ -8,7 +8,7 @@ import java.util.Base64;
 import java.util.stream.Collectors;
 
 @Service
-final class EncodingService implements IEncodingSrv {
+class EncodingService implements IEncodingSrv {
 
     @Override
     public String returnAsBase64(String separator, String... vars) {

@@ -18,7 +18,7 @@ class OAuthTokenRequestBuilderTest {
     @Test
     void checkHeadersOfHttpEntity_whenReturnHttpEntityIsCalled() {
 
-        OAuthTokenRequestMaker<String> requestMaker = new OAuthTokenRequestMaker<>(new EncodingService(), clientId, clientSecret);
+        OAuthTokenRequestMaker requestMaker = new OAuthTokenRequestMaker(new EncodingService(), clientId, clientSecret);
 
         String expectedAuthorization = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes());
         HttpEntity<String> requestEntity = requestMaker.returnHttpEntity(authorizationCode);
@@ -32,7 +32,7 @@ class OAuthTokenRequestBuilderTest {
     @Test
     void checkBodyOfHttpEntity_whenReturnHttpEntityIsCalled() {
 
-        OAuthTokenRequestMaker<String> requestMaker = new OAuthTokenRequestMaker<>(new EncodingService(), clientId, clientSecret);
+        OAuthTokenRequestMaker requestMaker = new OAuthTokenRequestMaker(new EncodingService(), clientId, clientSecret);
 
         String expectedBody = "grant_type=authorization_code&code=" + authorizationCode;
 
