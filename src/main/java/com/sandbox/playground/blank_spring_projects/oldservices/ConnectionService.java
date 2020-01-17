@@ -1,14 +1,10 @@
-package com.sandbox.playground.blank_spring_projects.services;
+package com.sandbox.playground.blank_spring_projects.oldservices;
 
 import com.sandbox.playground.blank_spring_projects.exceptions.UnsupportedContentTypeException;
 import com.sandbox.playground.blank_spring_projects.utils.ContentType;
 import com.sandbox.playground.blank_spring_projects.utils.Headers;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;

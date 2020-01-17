@@ -1,10 +1,9 @@
-package com.sandbox.playground.blank_spring_projects.services;
+package com.sandbox.playground.blank_spring_projects.oldservices;
 
 import com.sandbox.playground.blank_spring_projects.exceptions.InvalidValuesPassedForBase64EncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;

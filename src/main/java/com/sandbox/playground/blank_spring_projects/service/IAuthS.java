@@ -1,10 +1,10 @@
-package com.sandbox.playground.blank_spring_projects.newstructure.service;
+package com.sandbox.playground.blank_spring_projects.service;
 
 import com.sandbox.playground.blank_spring_projects.model.Token;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.InsufficientResourceException;
+import com.sandbox.playground.blank_spring_projects.service.exception.InsufficientResourceException;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.RedirectContext;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.TokenScope;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.UnknownContextException;
+import com.sandbox.playground.blank_spring_projects.service.exception.UnknownContextException;
 import lombok.NonNull;
 
 import java.net.URI;

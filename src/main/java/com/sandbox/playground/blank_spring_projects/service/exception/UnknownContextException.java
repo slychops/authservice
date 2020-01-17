@@ -1,4 +1,4 @@
-package com.sandbox.playground.blank_spring_projects.newstructure.service.exception;
+package com.sandbox.playground.blank_spring_projects.service.exception;
 
 public class UnknownContextException extends Exception {
     public UnknownContextException() {

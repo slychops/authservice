@@ -1,4 +1,4 @@
-package com.sandbox.playground.blank_spring_projects.newstructure.service;
+package com.sandbox.playground.blank_spring_projects.service;
 
 public class SetupClasses {
 

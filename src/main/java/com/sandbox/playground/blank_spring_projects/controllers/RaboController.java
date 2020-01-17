@@ -1,15 +1,12 @@
 package com.sandbox.playground.blank_spring_projects.controllers;
 
 import com.sandbox.playground.blank_spring_projects.model.Token;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.AccountService;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.OAuthService;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.InsufficientResourceException;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.UnknownContextException;
+import com.sandbox.playground.blank_spring_projects.service.OAuthService;
+import com.sandbox.playground.blank_spring_projects.service.exception.InsufficientResourceException;
+import com.sandbox.playground.blank_spring_projects.service.exception.UnknownContextException;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.RedirectContext;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.TokenScope;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

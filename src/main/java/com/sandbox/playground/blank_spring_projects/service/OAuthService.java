@@ -1,9 +1,7 @@
-package com.sandbox.playground.blank_spring_projects.newstructure.service;
+package com.sandbox.playground.blank_spring_projects.service;
 
-import com.sandbox.playground.blank_spring_projects.model.ErrorToken;
 import com.sandbox.playground.blank_spring_projects.model.Token;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.InsufficientResourceException;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.UnknownContextException;
+import com.sandbox.playground.blank_spring_projects.service.exception.UnknownContextException;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.RedirectContext;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.TokenScope;
 import lombok.NonNull;
@@ -12,12 +10,9 @@ import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestClientResponseException;
 
 import java.net.URI;
 import java.net.URISyntaxException;

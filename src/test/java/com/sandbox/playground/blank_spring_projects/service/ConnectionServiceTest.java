@@ -1,4 +1,4 @@
-package com.sandbox.playground.blank_spring_projects.newstructure.service;
+package com.sandbox.playground.blank_spring_projects.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sandbox.playground.blank_spring_projects.model.Token;
@@ -6,11 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.sandbox.playground.blank_spring_projects.services;
+package com.sandbox.playground.blank_spring_projects.oldservices;
 
 import com.sandbox.playground.blank_spring_projects.model.Accounts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 //@Service

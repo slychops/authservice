@@ -1,24 +1,21 @@
-package com.sandbox.playground.blank_spring_projects.newstructure.service;
+package com.sandbox.playground.blank_spring_projects.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sandbox.playground.blank_spring_projects.model.ErrorToken;
 import com.sandbox.playground.blank_spring_projects.model.Token;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.InsufficientResourceException;
-import com.sandbox.playground.blank_spring_projects.newstructure.service.exception.UnknownContextException;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.RedirectContext;
 import com.sandbox.playground.blank_spring_projects.newstructure.utils.contexts.TokenScope;
+import com.sandbox.playground.blank_spring_projects.service.exception.InsufficientResourceException;
+import com.sandbox.playground.blank_spring_projects.service.exception.UnknownContextException;
 import org.apache.http.client.utils.URIBuilder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.*;
-import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,8 +24,6 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 
@@ -50,34 +45,7 @@ class OAuthServiceTest {
 
     private final String tokenUri = "tokenUri";
     @Mock
-    private RestTemplate restTemplate;
-    @Mock
     private OAuthTokenRequestMaker tokenRequestMaker;
-    private OAuthService authService20;
-    private HttpEntity emptyRequest = HttpEntity.EMPTY;
-
-    @BeforeEach
-    void setUp() {
-//        authService = new OAuthService(
-//                tokenRequestMaker,
-//                new ConnectionService(restTemplate),
-//                "testEndpoint",
-//                "clientId",
-//                URI.create(tokenUri),
-//                "clientSecret");
-//
-//        lenient().when(tokenRequestMaker.returnHttpEntity(anyString())).thenReturn(emptyRequest);
-    }
-
-
-    //ToDo: Need to add test for actual Token response values -- Create stub for Token
-//    @Test
-//    void whenCalling_fetchToken_and2xxResponse_returnToken() throws InsufficientResourceException {
-//        mockRestTemplateResponse(HttpStatus.ACCEPTED);
-//
-//        assertEquals(Token.class, authService.fetchToken("").getClass());
-//        verify(restTemplate, Mockito.times(1)).exchange(tokenUri, HttpMethod.POST, emptyRequest, String.class);
-//    }
 
     @Test
     void whenCalling_fetchToken_and2xxResponse_returnTokenWithValues() throws InsufficientResourceException, IOException {
@@ -86,7 +54,7 @@ class OAuthServiceTest {
         String authCode = "12345";
         HttpEntity<String> entityStub = new HttpEntity<>("this body");
         Token tokenStub = new ObjectMapper().readValue(
-                Files.readString(Paths.get("./src/test/java/com/sandbox/playground/blank_spring_projects/newstructure/resource/token_response")),
+                Files.readString(Paths.get("./src/test/java/com/sandbox/playground/blank_spring_projects/resource/token_response")),
                 Token.class
         );
         ResponseEntity<Token> responseStub = new ResponseEntity<>(tokenStub, HttpStatus.ACCEPTED);
@@ -103,7 +71,7 @@ class OAuthServiceTest {
                 conServiceMock,
                 "Authendpoint",
                 clientId,
-                URI.create("tokenUri"),
+                URI.create(tokenUri),
                 clientSecret
         );
         when(requestSpy.returnHttpEntity(authCode)).thenReturn(entityStub);
@@ -117,61 +85,19 @@ class OAuthServiceTest {
                 doPost(URI.create(tokenUri), HttpMethod.POST, entityStub, Token.class);
         verify(requestSpy, times(2)).
                 returnHttpEntity(authCode);
-
     }
-//    @Test
-//    void whenCalling_fetchToken_andExceptionThrown_returnErrorToken() throws InsufficientResourceException {
-////        ConnectionService conService = mock(ConnectionService.class);
-////        lenient().when(conService.doPost(
-////                any(),
-////                eq(HttpMethod.POST),
-////                any(),
-////                eq(Token.class)
-////        )).thenThrow(RestClientResponseException.class);
-//        when(restTemplate.exchange(
-//                any(),
-//                eq(HttpMethod.POST),
-//                any(),
-//                eq(Token.class)
-//        )).thenThrow(RestClientResponseException.class);
-//
-////        assertThrows(RestClientResponseException.class,
-////                () -> authService.fetchToken("1234"));
-//        assertEquals(ErrorToken.class, authService.fetchToken("12345"));
-//
-//    }
-
-//    //ToDo: Need to add test for actual errorToken response values -- Create stub for ErrorToken
-//    @Test
-//    void whenCalling_fetchToken_andErrorResponse_returnErrorToken() throws InsufficientResourceException {
-//        String expectedBody = "{responseStatus: 400}";
-//        ConnectionService conService = mock(ConnectionService.class);
-//
-//        when(restTemplate.exchange(
-//                anyString(),
-//                any(),
-//                any(),
-//                eq(Token.class)
-//        )).thenThrow(RestClientResponseException.class);
-//
-//        assertEquals(ErrorToken.class, authService.fetchToken("").getClass());
-//        verify(restTemplate, atLeastOnce()).exchange(tokenUri, HttpMethod.POST, emptyRequest, Token.class);
-//    }
-
-//    void mockRestTemplateResponse(HttpStatus outcome) {
-//        when(restTemplate.exchange(
-//                anyString(),
-//                any(),
-//                any(),
-//                eq(Token.class)
-//        )).thenReturn(new ResponseEntity<>(outcome));
-//    }
 
     @Test
     void whenCalling_fetchToken_withNullValue_expectNullPointerThrown() {
-
+        OAuthService authService = new OAuthService(
+                mock(OAuthTokenRequestMaker.class),
+                mock(ConnectionService.class),
+                "d",
+                "d",
+                URI.create("."),
+                "l");
         assertThrows(NullPointerException.class,
-                () -> authService20.fetchToken(null));
+                () -> authService.fetchToken(null));
     }
 
     @Test
@@ -193,7 +119,7 @@ class OAuthServiceTest {
     private void checkExpectation(String testEndpoint, String clientId, RedirectContext context, TokenScope scope) throws URISyntaxException, UnknownContextException {
         OAuthService authService = new OAuthService(
                 tokenRequestMaker,
-                new ConnectionService(restTemplate),
+                mock(ConnectionService.class),
                 testEndpoint,
                 clientId,
                 URI.create("tokenUri"),

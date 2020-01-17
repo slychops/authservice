@@ -1,6 +1,5 @@
 package com.sandbox.playground.blank_spring_projects;
 
-import com.sandbox.playground.blank_spring_projects.services.OAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;

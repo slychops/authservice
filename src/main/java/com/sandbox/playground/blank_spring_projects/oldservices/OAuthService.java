@@ -1,17 +1,13 @@
-package com.sandbox.playground.blank_spring_projects.services;
+package com.sandbox.playground.blank_spring_projects.oldservices;
 
 import com.sandbox.playground.blank_spring_projects.exceptions.UnsupportedContentTypeException;
 import com.sandbox.playground.blank_spring_projects.model.ErrorToken;
 import com.sandbox.playground.blank_spring_projects.model.Token;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
